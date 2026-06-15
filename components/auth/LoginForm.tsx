@@ -45,10 +45,6 @@ export function LoginForm() {
         <h1 className="font-display text-[2rem] font-semibold leading-tight text-fg">
           Sign in to Alpha
         </h1>
-        <p className="mt-2 text-fg-muted">
-          Use the same email and password as your Allegiance (Reelly) account. By
-          introduction only — please use the address shared with your advisor.
-        </p>
       </div>
 
       {error && (
