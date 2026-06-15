@@ -27,21 +27,26 @@ export function Wordmark({
 }
 
 export function Monogram({ size = 34 }: { size?: number }) {
+  // Allegiance "Alpha" mark — a green lowercase alpha (α).
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 64 64"
+      viewBox="-3 -4 112 112"
       fill="none"
       aria-hidden
       className="shrink-0"
     >
-      <rect width="64" height="64" rx="14" fill="#15161a" />
-      <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="rgba(196,245,66,0.25)" strokeWidth="1.5" />
-      <path
-        d="M32 14 L46 50 H38.5 L35.6 42 H28.4 L25.5 50 H18 Z M30.3 35.5 H33.7 L32 30.6 Z"
-        fill="#c4f542"
-      />
+      <g
+        fill="none"
+        stroke="#67BD46"
+        strokeWidth={12.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <ellipse cx="40" cy="52" rx="28" ry="33" />
+        <path d="M58 24 C79 39 72 66 85 82 C90 90 99 85 95 74" />
+      </g>
     </svg>
   );
 }
