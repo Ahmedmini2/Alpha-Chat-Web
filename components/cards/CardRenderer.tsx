@@ -16,6 +16,8 @@ import { VideoStatusCard } from "./VideoStatusCard";
 import { AvatarLooksCard } from "./AvatarLooksCard";
 import { BrochureCard } from "./BrochureCard";
 import { ComparisonPdfCard } from "./ComparisonPdfCard";
+import { AlphaVerdictCard } from "./AlphaVerdictCard";
+import { LiveMarketCard } from "./LiveMarketCard";
 
 /**
  * Dispatches a backend card to its renderer. Each card component is self-contained
@@ -54,6 +56,10 @@ export function CardRenderer({ card }: { card: Card }) {
       return <BrochureCard card={card} />;
     case "comparison_pdf":
       return <ComparisonPdfCard card={card} />;
+    case "alpha_verdict":
+      return <AlphaVerdictCard card={card} />;
+    case "live_market":
+      return <LiveMarketCard card={card} />;
     default:
       // Forward-compatible: a card type the frontend doesn't know yet.
       return null;

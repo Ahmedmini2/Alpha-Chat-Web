@@ -45,6 +45,19 @@ export interface ChatMessage {
   created_at: string;
 }
 
+/** GET /v1/videos/{id} — used to poll a promo video until it finishes rendering. */
+export interface VideoRecord {
+  id: string;
+  requested_by: string;
+  project_id: number | null;
+  status: string; // pending | processing | completed | failed
+  video_url: string | null;
+  thumbnail_url: string | null;
+  error: string | null;
+  created_at: string;
+  completed_at: string | null;
+}
+
 // ---------------------------------------------------------------------------
 // Shared domain shapes
 // ---------------------------------------------------------------------------
@@ -80,7 +93,23 @@ export interface ProjectSummary {
   units_count: number | null;
   /** Only on search_units results — the units that matched the query's filters. */
   matched_units?: MatchedUnits | null;
+  /** Ranked-list additions: short verdict label + conviction (0–100, 0–1, or a label). */
+  verdict?: string | null;
+  conviction?: number | string | null;
 }
+
+/** A pillar value tolerated in any of the shapes the backend might emit. */
+export type PillarValue =
+  | string
+  | number
+  | { label?: string | null; note?: string | null; score?: number | null }
+  | null;
+
+/** A valuation tolerated as a single AED number or a low/mid/high range. */
+export type Valuation =
+  | number
+  | { low?: number | null; mid?: number | null; high?: number | null }
+  | null;
 
 export interface UnitSummary {
   unit_type: string | null;
@@ -346,6 +375,45 @@ export interface VideoStatusCard {
   error_detail: string | null;
 }
 
+export interface AlphaVerdictCard {
+  type: "alpha_verdict";
+  verdict: string | null;
+  conviction: number | string | null;
+  pillars: {
+    yield?: PillarValue;
+    comp?: PillarValue;
+    thesis?: PillarValue;
+    risk?: PillarValue;
+  } | null;
+  numbers: {
+    net_yield_pct?: number | null;
+    area_rent_return_pct?: number | null;
+    annual_appreciation_pct?: number | null;
+    y5_value_aed?: number | null;
+    ppsf_aed?: number | null;
+    vs_area_price_pct?: number | null;
+  } | null;
+  community: string | null;
+  used_fallback: boolean | null;
+  basis: string | null;
+  // Optional project linkage (rendered if present).
+  project_id?: number | null;
+  project_name?: string | null;
+}
+
+export interface LiveMarketCard {
+  type: "live_market";
+  valuation: Valuation;
+  ppsf_aed: number | null;
+  observed_yield_pct: number | null;
+  sold: number | boolean | string | null;
+  fetched_at: string | null;
+  // Optional context (rendered if present).
+  community?: string | null;
+  project_name?: string | null;
+  source?: string | null;
+}
+
 export type Card =
   | ProjectListCard
   | NoMatchSuggestionsCard
@@ -361,7 +429,9 @@ export type Card =
   | AvatarLooksCard
   | BrochureCard
   | ComparisonPdfCard
-  | VideoStatusCard;
+  | VideoStatusCard
+  | AlphaVerdictCard
+  | LiveMarketCard;
 
 export type CardType = Card["type"];
 

@@ -14,6 +14,7 @@ export function ProjectListCard({ card }: { card: ProjectListCardData }) {
 
   return (
     <CardFrame icon={<Building2 className="h-4 w-4" />} title="Matching properties" eyebrow={eyebrow}>
+      {/* Render in the order returned — the backend already ranks by conviction. Do NOT re-sort. */}
       <Carousel>
         {items.map((p, i) => (
           <ProjectCard key={p?.id ?? i} project={p} />

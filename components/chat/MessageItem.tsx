@@ -5,6 +5,7 @@ import type { ChatMessage } from "@/lib/types";
 import { Markdown } from "./Markdown";
 import { CardRenderer } from "@/components/cards/CardRenderer";
 import { Monogram } from "@/components/ui/Wordmark";
+import { formatTime, formatDateTime } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 export function MessageItem({
@@ -43,12 +44,20 @@ export function MessageItem({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animate, full]);
 
+  const time = formatTime(message.created_at);
+  const fullTs = formatDateTime(message.created_at);
+
   if (isUser) {
     return (
-      <div className="flex justify-end animate-[rise_0.3s_var(--ease-out)_both]">
+      <div className="flex flex-col items-end gap-1 animate-[rise_0.3s_var(--ease-out)_both]">
         <div className="max-w-[85%] rounded-2xl rounded-tr-sm border border-border bg-elevated px-4 py-2.5 text-[15px] leading-relaxed text-fg shadow-soft">
           <p className="whitespace-pre-wrap break-words">{full}</p>
         </div>
+        {time && (
+          <time className="px-1 text-[10.5px] text-fg-subtle" dateTime={message.created_at} title={fullTs}>
+            {time}
+          </time>
+        )}
       </div>
     );
   }
@@ -62,11 +71,20 @@ export function MessageItem({
         <Monogram size={30} />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="mb-1 text-[13px] font-semibold tracking-tight text-fg">
+        <p className="mb-1 flex items-baseline gap-2 text-[13px] font-semibold tracking-tight text-fg">
           Alpha
-          <span className="ml-2 align-middle text-[10px] font-normal uppercase tracking-[0.16em] text-fg-subtle">
+          <span className="text-[10px] font-normal uppercase tracking-[0.16em] text-fg-subtle">
             Allegiance
           </span>
+          {time && (
+            <time
+              className="text-[10.5px] font-normal tracking-normal text-fg-subtle"
+              dateTime={message.created_at}
+              title={fullTs}
+            >
+              {time}
+            </time>
+          )}
         </p>
 
         {visibleText ? (

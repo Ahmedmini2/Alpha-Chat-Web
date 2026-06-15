@@ -1,9 +1,11 @@
 "use client";
 
-import { MapPin, Layers } from "lucide-react";
+import { MapPin, Layers, ChevronRight } from "lucide-react";
 import type { ProjectSummary } from "@/lib/types";
 import { formatPrice, formatPriceRange, formatBeds, locationLine, titleCase } from "@/lib/format";
 import { Pill, statusTone } from "./kit";
+import { VerdictBadge } from "./verdict";
+import { useChatActions } from "@/components/chat/chat-actions";
 import { cn } from "@/lib/cn";
 
 function bedsRange(min: number | null, max: number | null): string {
@@ -14,8 +16,8 @@ function bedsRange(min: number | null, max: number | null): string {
 
 /**
  * Compact property tile for ProjectSummary items (project_list, suggestions).
- * Note: summary items carry NO image from the API, so we use an elegant silk
- * banner with the project initial instead of a photo.
+ * Clickable: selecting it sends the project name back into the chat, so the user
+ * can pick "this one" for the next action (details, a video, etc.).
  */
 export function ProjectCard({
   project,
@@ -24,13 +26,32 @@ export function ProjectCard({
   project: ProjectSummary;
   className?: string;
 }) {
+  const { send, busy } = useChatActions();
   const loc = locationLine(project.district, project.city || project.region, project.country);
   const initial = (project.name || "A").trim().charAt(0).toUpperCase();
 
+  const choose = () => {
+    if (busy || !project.name) return;
+    send(project.name);
+  };
+
   return (
     <article
+      role="button"
+      tabIndex={0}
+      aria-label={`Select ${project.name}`}
+      title={`Select ${project.name}`}
+      onClick={choose}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          choose();
+        }
+      }}
       className={cn(
-        "flex w-60 shrink-0 snap-start flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-soft transition hover:border-border-gold hover:shadow-card",
+        "group flex w-60 shrink-0 cursor-pointer snap-start flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-soft outline-none transition",
+        "hover:border-border-gold hover:shadow-card focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/30 active:scale-[0.99]",
+        busy && "pointer-events-none opacity-60",
         className,
       )}
     >
@@ -42,10 +63,15 @@ export function ProjectCard({
             <Pill tone={statusTone(project.sale_status)}>{titleCase(project.sale_status)}</Pill>
           </span>
         )}
+        {(project.verdict || project.conviction != null) && (
+          <span className="absolute right-2.5 top-2.5">
+            <VerdictBadge verdict={project.verdict} conviction={project.conviction} />
+          </span>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-3.5">
-        <h4 className="line-clamp-2 font-display text-[15px] font-semibold leading-snug text-fg">
+        <h4 className="line-clamp-2 font-display text-[15px] font-semibold leading-snug text-fg transition group-hover:text-accent">
           {project.name}
         </h4>
         {project.developer && (
@@ -93,6 +119,11 @@ export function ProjectCard({
               </p>
             </div>
           )}
+
+          {/* Click affordance */}
+          <p className="mt-2.5 flex items-center gap-1 text-[11px] font-medium text-accent opacity-0 transition group-hover:opacity-100">
+            Select <ChevronRight className="h-3 w-3 transition group-hover:translate-x-0.5" />
+          </p>
         </div>
       </div>
     </article>

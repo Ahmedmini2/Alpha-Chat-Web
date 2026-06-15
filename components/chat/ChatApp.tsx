@@ -8,6 +8,7 @@ import { Sidebar } from "./Sidebar";
 import { MessageThread } from "./MessageThread";
 import { Composer } from "./Composer";
 import { EmptyState } from "./EmptyState";
+import { ChatActionsProvider } from "./chat-actions";
 import { Monogram } from "@/components/ui/Wordmark";
 
 export interface UserInfo {
@@ -179,20 +180,23 @@ export function ChatApp({
           </div>
         )}
 
-        {/* Thread / empty state */}
-        <div className="relative flex-1 overflow-hidden">
-          {messages.length === 0 && !loadingThread ? (
-            <EmptyState userName={user.name} onPrompt={handleSend} />
-          ) : (
-            <MessageThread
-              messages={messages}
-              pending={pending}
-              loading={loadingThread}
-              animateId={animateId}
-              onAnimateComplete={() => setAnimateId(null)}
-            />
-          )}
-        </div>
+        {/* Thread / empty state. The provider lets cards send follow-up messages
+            (e.g. clicking a project card to select it). */}
+        <ChatActionsProvider value={{ send: handleSend, busy: pending }}>
+          <div className="relative flex-1 overflow-hidden">
+            {messages.length === 0 && !loadingThread ? (
+              <EmptyState userName={user.name} onPrompt={handleSend} />
+            ) : (
+              <MessageThread
+                messages={messages}
+                pending={pending}
+                loading={loadingThread}
+                animateId={animateId}
+                onAnimateComplete={() => setAnimateId(null)}
+              />
+            )}
+          </div>
+        </ChatActionsProvider>
 
         {/* Composer */}
         <div className="shrink-0 px-4 pb-4">

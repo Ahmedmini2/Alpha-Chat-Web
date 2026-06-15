@@ -91,6 +91,28 @@ export function formatDays(days: number | null | undefined): string {
   return `${Math.round(days)} day${Math.round(days) === 1 ? "" : "s"}`;
 }
 
+/** Clock time "2:32 PM" (locale-aware). */
+export function formatTime(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+}
+
+/** Full timestamp for tooltips, e.g. "12 Jun 2026, 2:32 PM". */
+export function formatDateTime(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString(undefined, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
 /** Short date "12 Jun 2026". */
 export function formatDate(iso: string | null | undefined): string {
   if (!iso) return "";

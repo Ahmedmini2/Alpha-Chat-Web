@@ -1,5 +1,5 @@
 import "server-only";
-import type { ChatResponse, Conversation, ChatMessage } from "./types";
+import type { ChatResponse, Conversation, ChatMessage, VideoRecord } from "./types";
 
 // Server-only client for the Ask Alpha FastAPI backend. The browser never calls
 // this directly — it goes through the Next.js route handlers in app/api/*, which
@@ -91,4 +91,8 @@ export function getMessages(conversationId: string, limit = 200): Promise<ChatMe
     `/conversations/${conversationId}/messages?limit=${limit}`,
     { method: "GET" },
   );
+}
+
+export function getVideo(videoId: string): Promise<VideoRecord> {
+  return request<VideoRecord>(`/videos/${videoId}`, { method: "GET", timeoutMs: 20_000 });
 }
