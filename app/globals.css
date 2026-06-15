@@ -1,0 +1,294 @@
+@import "tailwindcss";
+
+/* =========================================================================
+   Ask Alpha — AREDXB / Allegiance DARK design system
+   Surfaces: #0a0a0b → #111114 → #17171b · Accent: lime #c4f542
+   Type: Instrument Serif (display) · Geist (sans) · Geist Mono (labels)
+   ========================================================================= */
+
+@theme {
+  /* ---- "green" scale repurposed as light-neutral + lime emphasis ---- */
+  --color-green-950: #000000;
+  --color-green-900: #0a0a0b; /* dark surface / dark text on lime */
+  --color-green-800: #c4f542; /* emphasis / prices -> lime */
+  --color-green-700: #8fb82e;
+  --color-green-600: #c4f542; /* links -> lime */
+  --color-green-500: #c4f542;
+  --color-green-400: #c4f542; /* glow */
+  --color-green-300: #a0a0aa;
+  --color-green-200: #c9c9d2;
+  --color-green-100: #ededf0; /* light text on dark */
+  --color-green-50: #17171b;
+
+  /* ---- "gold" scale repurposed as lime + dark lime tints ---- */
+  --color-gold-900: #c4f542; /* text on dark-lime tint */
+  --color-gold-800: #b8e838;
+  --color-gold-700: #8fb82e;
+  --color-gold-600: #b8e838;
+  --color-gold-500: #c4f542; /* brand accent -> lime */
+  --color-gold-400: #c4f542;
+  --color-gold-300: #aee04a;
+  --color-gold-200: #2e3a16;
+  --color-gold-100: #1f2a10; /* dark lime tint surface */
+  --color-gold-50: #161c0c; /* darker lime tint surface */
+
+  /* ---- grey scale -> dark neutrals ---- */
+  --color-grey-900: #ededf0;
+  --color-grey-800: #c9c9d2;
+  --color-grey-700: #a0a0aa;
+  --color-grey-600: #a0a0aa;
+  --color-grey-500: #6b6b75;
+  --color-grey-400: #6b6b75;
+  --color-grey-300: #2e2e36;
+  --color-grey-200: #23232a;
+  --color-grey-100: #17171b;
+  --color-grey-50: #111114;
+
+  /* ---- paper / surfaces ---- */
+  --color-cream: #ededf0; /* now = light text */
+  --color-ivory: #111114;
+  --color-paper: #111114;
+  --color-obsidian: #000000;
+  --color-ink: #0a0a0b; /* text on lime accents */
+
+  /* ---- semantic (dark) ---- */
+  --color-bg: #0a0a0b;
+  --color-surface: #111114;
+  --color-elevated: #17171b;
+  --color-muted: #17171b;
+  --color-inverse: #ededf0;
+
+  --color-fg: #ededf0;
+  --color-fg-muted: #a0a0aa;
+  --color-fg-subtle: #6b6b75;
+  --color-fg-on-dark: #ededf0;
+
+  --color-primary: #c4f542;
+  --color-primary-hover: #d2ff52;
+  --color-primary-press: #b8e838;
+
+  --color-accent: #c4f542;
+  --color-accent-hover: #d2ff52;
+  --color-accent-press: #d2ff52;
+
+  --color-line: #23232a;
+  --color-border: #23232a;
+  --color-border-strong: #2e2e36;
+  --color-border-gold: rgba(196, 245, 66, 0.35);
+
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-danger: #ff6b6b;
+  --color-info: #7ab0ff;
+
+  /* ---- type families (wired to next/font in layout.tsx) ---- */
+  --font-serif: var(--font-instrument), "Instrument Serif", Georgia, serif;
+  --font-sans: var(--font-geist), "Geist", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, SFMono-Regular,
+    Menlo, monospace;
+
+  /* ---- radii ---- */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 20px;
+
+  /* ---- shadows (dark) ---- */
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 18px rgba(0, 0, 0, 0.35);
+  --shadow-card: 0 2px 6px rgba(0, 0, 0, 0.45), 0 20px 50px -12px rgba(0, 0, 0, 0.6);
+  --shadow-lift: 0 10px 30px rgba(0, 0, 0, 0.55), 0 28px 64px rgba(0, 0, 0, 0.6);
+
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --animate-fade-in: fade-in 0.4s var(--ease-out) both;
+  --animate-rise: rise 0.45s var(--ease-out) both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* =========================================================================
+   Base
+   ========================================================================= */
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background: rgba(196, 245, 66, 0.28);
+    color: #ededf0;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.22); background-clip: padding-box; }
+
+  textarea { field-sizing: content; }
+}
+
+/* =========================================================================
+   Utilities / motifs
+   ========================================================================= */
+@layer components {
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  .font-display {
+    font-family: var(--font-serif);
+    font-weight: 400;
+  }
+  .rule-gold {
+    height: 1px;
+    border: 0;
+    background: linear-gradient(90deg, transparent 0%, var(--color-accent) 50%, transparent 100%);
+  }
+  /* "silk" = the AREDXB dark hero surface: near-black with a faint lime glow */
+  .silk {
+    background:
+      radial-gradient(900px 500px at 30% -10%, rgba(196, 245, 66, 0.10), transparent 60%),
+      radial-gradient(600px 400px at 90% 20%, rgba(120, 180, 255, 0.04), transparent 60%),
+      #0c0c0e;
+  }
+  .gold-foil {
+    background: linear-gradient(135deg, #d2ff52 0%, #c4f542 45%, #8fb82e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .typing-dot {
+    animation: dot-bounce 1.2s infinite var(--ease-out);
+  }
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 25%,
+      rgba(255, 255, 255, 0.08) 37%,
+      rgba(255, 255, 255, 0.04) 63%
+    );
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+}
+
+/* =========================================================================
+   Markdown ("prose-alpha") — dark
+   ========================================================================= */
+.prose-alpha {
+  color: var(--color-fg);
+  font-size: 15.5px;
+  line-height: 1.7;
+}
+.prose-alpha > :first-child { margin-top: 0; }
+.prose-alpha > :last-child { margin-bottom: 0; }
+.prose-alpha p { margin: 0.7em 0; }
+.prose-alpha strong { font-weight: 600; color: #ffffff; }
+.prose-alpha em { font-style: italic; }
+.prose-alpha a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(196, 245, 66, 0.4);
+}
+.prose-alpha a:hover { color: #d2ff52; }
+.prose-alpha ul,
+.prose-alpha ol { margin: 0.6em 0; padding-left: 1.35em; }
+.prose-alpha ul { list-style: disc; }
+.prose-alpha ol { list-style: decimal; }
+.prose-alpha li { margin: 0.3em 0; }
+.prose-alpha li::marker { color: var(--color-accent); }
+.prose-alpha h1,
+.prose-alpha h2,
+.prose-alpha h3 {
+  font-family: var(--font-serif);
+  color: var(--color-fg);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 1.1em 0 0.5em;
+}
+.prose-alpha h1 { font-size: 1.6em; }
+.prose-alpha h2 { font-size: 1.35em; }
+.prose-alpha h3 { font-size: 1.15em; }
+.prose-alpha code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: #17171b;
+  border: 1px solid var(--color-border);
+  padding: 0.1em 0.36em;
+  border-radius: 4px;
+  color: #d2ff52;
+}
+.prose-alpha pre {
+  background: #000000;
+  color: #ededf0;
+  padding: 1em 1.1em;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 0.9em 0;
+}
+.prose-alpha pre code { background: transparent; border: 0; padding: 0; color: inherit; }
+.prose-alpha blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1em;
+  margin: 0.9em 0;
+  color: var(--color-fg-muted);
+  font-style: italic;
+}
+.prose-alpha table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.9em 0;
+  font-size: 0.92em;
+}
+.prose-alpha th,
+.prose-alpha td {
+  border: 1px solid var(--color-border);
+  padding: 0.5em 0.7em;
+  text-align: left;
+}
+.prose-alpha th { background: #17171b; font-weight: 600; color: var(--color-fg); }
+.prose-alpha hr { border: 0; height: 1px; background: var(--color-border); margin: 1.2em 0; }
