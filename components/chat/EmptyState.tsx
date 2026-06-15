@@ -1,28 +1,32 @@
 "use client";
 
-import { TrendingUp, Building2, LineChart, Scale } from "lucide-react";
+import { Clapperboard, FileText, Scale, Sparkles } from "lucide-react";
 import { Monogram } from "@/components/ui/Wordmark";
 
 const SUGGESTIONS = [
   {
-    icon: Building2,
-    label: "Find projects",
-    text: "Show me 2-bedroom apartments in Dubai Marina under 3M AED",
+    icon: Clapperboard,
+    title: "Make project videos",
+    subtitle: "AI-avatar promo videos for any project",
+    prompt: "I'd like to make a promo video for a project. Which projects can you create one for?",
   },
   {
-    icon: TrendingUp,
-    label: "Market pulse",
-    text: "How is the property market in Business Bay performing right now?",
-  },
-  {
-    icon: LineChart,
-    label: "Investment check",
-    text: "Is Emaar Beachfront a good investment?",
+    icon: FileText,
+    title: "Get brochures & flyers",
+    subtitle: "Branded PDF brochures on demand",
+    prompt: "Create a branded mini-brochure (PDF) for a project.",
   },
   {
     icon: Scale,
-    label: "Compare",
-    text: "Compare DAMAC Lagoons and Emaar South for a buy-to-let",
+    title: "Get comparison reports",
+    subtitle: "Side-by-side project comparisons",
+    prompt: "Create a side-by-side comparison report for two projects.",
+  },
+  {
+    icon: Sparkles,
+    title: "Chat with Alpha",
+    subtitle: "Ask anything about Dubai real estate",
+    prompt: "What can you help me with?",
   },
 ];
 
@@ -54,26 +58,25 @@ export function EmptyState({
           {greeting()}, {first}.
         </h2>
         <p className="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-fg-muted">
-          I&apos;m Alpha — your Dubai real-estate desk. Ask me about projects, prices,
-          market trends, or whether something&apos;s worth buying.
+          I&apos;m Alpha — your Dubai real-estate desk. Pick a quick action, or just ask.
         </p>
 
         <div className="mt-9 grid gap-3 sm:grid-cols-2">
           {SUGGESTIONS.map((s) => (
             <button
-              key={s.label}
-              onClick={() => onPrompt(s.text)}
+              key={s.title}
+              onClick={() => onPrompt(s.prompt)}
               className="group flex items-start gap-3 rounded-xl border border-border bg-surface p-4 text-left shadow-soft transition hover:border-border-gold hover:shadow-card"
             >
-              <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-muted text-accent transition group-hover:bg-gold-100">
-                <s.icon className="h-4 w-4" />
+              <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-muted text-accent transition group-hover:bg-[rgba(196,245,66,0.12)]">
+                <s.icon className="h-4.5 w-4.5" />
               </span>
               <span className="min-w-0">
-                <span className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
-                  {s.label}
+                <span className="block text-[14.5px] font-medium leading-snug text-fg">
+                  {s.title}
                 </span>
-                <span className="mt-0.5 block text-[13.5px] leading-snug text-fg-muted">
-                  {s.text}
+                <span className="mt-0.5 block text-[12.5px] leading-snug text-fg-subtle">
+                  {s.subtitle}
                 </span>
               </span>
             </button>
