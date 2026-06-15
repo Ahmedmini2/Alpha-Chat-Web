@@ -134,6 +134,21 @@ export function timeAgo(iso: string | null | undefined): string {
   return formatDate(iso);
 }
 
+/** "today" / "yesterday" / "on 11 May" — for a date-only string like "2026-05-11". */
+export function relativeDay(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const base = iso.includes("T") ? iso : `${iso}T00:00:00`;
+  const d = new Date(base);
+  if (Number.isNaN(d.getTime())) return "";
+  const now = new Date();
+  const a = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const b = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const diff = Math.round((b - a) / 86400_000);
+  if (diff === 0) return "today";
+  if (diff === 1) return "yesterday";
+  return `on ${d.toLocaleDateString(undefined, { day: "numeric", month: "short" })}`;
+}
+
 export type DateBucket = "Today" | "Yesterday" | "Previous 7 days" | "Previous 30 days" | "Older";
 
 /** Bucket a timestamp for the conversation-history sidebar (Claude-style groups). */

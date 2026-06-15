@@ -1,5 +1,11 @@
 // Client-side wrappers around our Next.js API proxy routes (app/api/*).
-import type { ChatResponse, Conversation, ChatMessage, VideoRecord } from "./types";
+import type {
+  ChatResponse,
+  Conversation,
+  ChatMessage,
+  VideoRecord,
+  DailyVolume,
+} from "./types";
 
 async function asError(res: Response): Promise<never> {
   let msg = `Request failed (${res.status})`;
@@ -39,6 +45,12 @@ export async function postChat(body: {
 
 export async function fetchVideoStatus(id: string): Promise<VideoRecord> {
   const res = await fetch(`/api/videos/${id}`, { cache: "no-store" });
+  if (!res.ok) return asError(res);
+  return res.json();
+}
+
+export async function fetchDailyVolume(): Promise<DailyVolume> {
+  const res = await fetch("/api/market/daily-volume");
   if (!res.ok) return asError(res);
   return res.json();
 }

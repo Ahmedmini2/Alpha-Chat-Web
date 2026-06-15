@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Clapperboard, FileText, Scale, Sparkles } from "lucide-react";
 import { Monogram } from "@/components/ui/Wordmark";
+import { fetchDailyVolume } from "@/lib/api";
+import { compactNumber, relativeDay } from "@/lib/format";
 
 const SUGGESTIONS = [
   {
@@ -45,6 +48,25 @@ export function EmptyState({
   onPrompt: (text: string) => void;
 }) {
   const first = userName.split(" ")[0];
+
+  // Live DLD market hook — refetched each time a new chat opens this screen.
+  // Cached server-side so the number is stable within a day and only changes
+  // when fresh transaction data lands.
+  const [hook, setHook] = useState<{ aed: string; when: string } | null>(null);
+  useEffect(() => {
+    let active = true;
+    fetchDailyVolume()
+      .then((v) => {
+        if (active && v.total_aed && v.total_aed > 0) {
+          setHook({ aed: `AED ${compactNumber(v.total_aed)}`, when: relativeDay(v.date) });
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <div className="flex h-full items-center justify-center overflow-y-auto px-4 py-10">
       <div className="w-full max-w-2xl text-center animate-[rise_0.5s_var(--ease-out)_both]">
@@ -58,7 +80,14 @@ export function EmptyState({
           {greeting()}, {first}.
         </h2>
         <p className="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-fg-muted">
-          I&apos;m Alpha — your Dubai real-estate desk. Pick a quick action, or just ask.
+          {hook ? (
+            <>
+              Dubai sold <span className="font-semibold text-accent">{hook.aed}</span> {hook.when}.{" "}
+              How much did you sell?
+            </>
+          ) : (
+            "I'm Alpha — your Dubai real-estate desk. Pick a quick action, or just ask."
+          )}
         </p>
 
         <div className="mt-9 grid gap-3 sm:grid-cols-2">

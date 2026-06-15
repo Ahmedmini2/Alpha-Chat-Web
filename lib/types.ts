@@ -45,6 +45,13 @@ export interface ChatMessage {
   created_at: string;
 }
 
+/** GET /v1/market/daily-volume — total DLD transaction value for the latest day. */
+export interface DailyVolume {
+  date: string | null;
+  total_aed: number | null;
+  count: number;
+}
+
 /** GET /v1/videos/{id} — used to poll a promo video until it finishes rendering. */
 export interface VideoRecord {
   id: string;

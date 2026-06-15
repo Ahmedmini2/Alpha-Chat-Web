@@ -1,5 +1,11 @@
 import "server-only";
-import type { ChatResponse, Conversation, ChatMessage, VideoRecord } from "./types";
+import type {
+  ChatResponse,
+  Conversation,
+  ChatMessage,
+  VideoRecord,
+  DailyVolume,
+} from "./types";
 
 // Server-only client for the Ask Alpha FastAPI backend. The browser never calls
 // this directly — it goes through the Next.js route handlers in app/api/*, which
@@ -95,4 +101,19 @@ export function getMessages(conversationId: string, limit = 200): Promise<ChatMe
 
 export function getVideo(videoId: string): Promise<VideoRecord> {
   return request<VideoRecord>(`/videos/${videoId}`, { method: "GET", timeoutMs: 20_000 });
+}
+
+/**
+ * Daily DLD volume for the welcome hook. Cached for an hour so the number is
+ * stable within a day and only changes when fresh transaction data lands —
+ * without re-querying the backend on every new chat.
+ */
+export async function getDailyVolume(): Promise<DailyVolume> {
+  const res = await fetch(`${API}/market/daily-volume`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    next: { revalidate: 3600 },
+  });
+  if (!res.ok) throw new AskAlphaError(`daily-volume ${res.status}`, res.status);
+  return (await res.json()) as DailyVolume;
 }
