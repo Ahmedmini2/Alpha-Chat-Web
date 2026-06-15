@@ -5,7 +5,7 @@ import type { ChatMessage } from "@/lib/types";
 import { Markdown } from "./Markdown";
 import { CardRenderer } from "@/components/cards/CardRenderer";
 import { Monogram } from "@/components/ui/Wordmark";
-import { formatTime, formatDateTime } from "@/lib/format";
+import { formatDateTime } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 export function MessageItem({
@@ -44,8 +44,7 @@ export function MessageItem({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animate, full]);
 
-  const time = formatTime(message.created_at);
-  const fullTs = formatDateTime(message.created_at);
+  const stamp = formatDateTime(message.created_at);
 
   if (isUser) {
     return (
@@ -53,9 +52,9 @@ export function MessageItem({
         <div className="max-w-[85%] rounded-2xl rounded-tr-sm border border-border bg-elevated px-4 py-2.5 text-[15px] leading-relaxed text-fg shadow-soft">
           <p className="whitespace-pre-wrap break-words">{full}</p>
         </div>
-        {time && (
-          <time className="px-1 text-[10.5px] text-fg-subtle" dateTime={message.created_at} title={fullTs}>
-            {time}
+        {stamp && (
+          <time className="px-1 text-[10.5px] text-fg-subtle" dateTime={message.created_at}>
+            {stamp}
           </time>
         )}
       </div>
@@ -76,13 +75,12 @@ export function MessageItem({
           <span className="text-[10px] font-normal uppercase tracking-[0.16em] text-fg-subtle">
             Allegiance
           </span>
-          {time && (
+          {stamp && (
             <time
               className="text-[10.5px] font-normal tracking-normal text-fg-subtle"
               dateTime={message.created_at}
-              title={fullTs}
             >
-              {time}
+              {stamp}
             </time>
           )}
         </p>

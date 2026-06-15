@@ -91,6 +91,8 @@ export interface ProjectSummary {
   currency: string | null;
   short_description: string | null;
   units_count: number | null;
+  /** Project cover photo (included by the backend in list payloads). */
+  cover_image_url?: string | null;
   /** Only on search_units results — the units that matched the query's filters. */
   matched_units?: MatchedUnits | null;
   /** Ranked-list additions: short verdict label + conviction (0–100, 0–1, or a label). */

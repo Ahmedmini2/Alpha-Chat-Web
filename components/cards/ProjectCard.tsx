@@ -3,7 +3,7 @@
 import { MapPin, Layers, ChevronRight } from "lucide-react";
 import type { ProjectSummary } from "@/lib/types";
 import { formatPrice, formatPriceRange, formatBeds, locationLine, titleCase } from "@/lib/format";
-import { Pill, statusTone } from "./kit";
+import { Pill, statusTone, Thumb } from "./kit";
 import { VerdictBadge } from "./verdict";
 import { useChatActions } from "@/components/chat/chat-actions";
 import { cn } from "@/lib/cn";
@@ -55,9 +55,18 @@ export function ProjectCard({
         className,
       )}
     >
-      {/* Silk banner (no photo in summary payload) */}
-      <div className="silk relative flex h-20 items-center justify-center">
-        <span className="font-display text-3xl text-gold-400/50">{initial}</span>
+      {/* Cover photo when available; otherwise an elegant silk banner with the initial. */}
+      <div className="relative h-24 w-full overflow-hidden">
+        {project.cover_image_url ? (
+          <>
+            <Thumb src={project.cover_image_url} alt={project.name} className="h-full w-full" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/15" />
+          </>
+        ) : (
+          <div className="silk flex h-full w-full items-center justify-center">
+            <span className="font-display text-3xl text-gold-400/50">{initial}</span>
+          </div>
+        )}
         {project.sale_status && (
           <span className="absolute left-2.5 top-2.5">
             <Pill tone={statusTone(project.sale_status)}>{titleCase(project.sale_status)}</Pill>
