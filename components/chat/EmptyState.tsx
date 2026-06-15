@@ -86,7 +86,7 @@ export function EmptyState({
               How much did you sell?
             </>
           ) : (
-            "I'm Alpha — your Dubai real-estate desk. Pick a quick action, or just ask."
+            "How much did you sell today?"
           )}
         </p>
 
